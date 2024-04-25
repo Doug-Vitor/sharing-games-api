@@ -9,8 +9,5 @@ namespace Infra.Configurations;
 internal class SuggestionConfiguration : IEntityTypeConfiguration<Suggestion>
 {
   public void Configure(EntityTypeBuilder<Suggestion> builder)
-  {
-    builder.ToTable(nameof(Suggestion));
-    builder.Property(g => g.Title).IsRequired().HasMaxLength(Constants.DefaultMaxLengthOfString);
-  }
+    => builder.HasOne(typeof(User)).WithMany(nameof(User.Suggestions)).HasForeignKey(nameof(Suggestion.UserId));
 }
