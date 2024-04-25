@@ -2,6 +2,7 @@ namespace Core.Entities;
 
 public abstract record BaseEntity()
 {
-  public readonly int Id;
-  public readonly DateTime CreatedAt, UpdatedAt;
+  public int Id { get; init; }
+  public DateTime CreatedAt { get; set; }
+  public DateTime UpdatedAt { get; set; }
 }
