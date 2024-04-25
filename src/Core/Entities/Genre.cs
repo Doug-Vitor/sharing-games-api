@@ -1,7 +1,7 @@
 namespace Core.Entities;
 
-public record Genre() : BaseEntity()
+public record Genre() : NamedEntity()
 {
-  public readonly string Name;
+  public string Name { get; init; }
   public virtual ICollection<Game> Games { get; init; }
 }

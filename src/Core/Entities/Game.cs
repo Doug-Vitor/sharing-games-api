@@ -1,12 +1,10 @@
 namespace Core.Entities;
 
-public record Game() : BaseEntity()
+public record Game() : NamedEntity()
 {
-  public readonly string Name;
-  public readonly string Synopsis;
-  public readonly int PublisherId;
-  public readonly int RequestedByUserId;
-  public readonly DateOnly ReleasedAt;
+  public string Synopsis { get; init; }
+  public int PublisherId { get; init; }
+  public DateOnly ReleasedAt { get; init; }
 
   public virtual Publisher Publisher { get; init; }
   public virtual ICollection<Image> Images { get; init; }

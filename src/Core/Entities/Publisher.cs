@@ -1,9 +1,9 @@
 namespace Core.Entities;
 
-public record Publisher() : BaseEntity()
+public record Publisher() : NamedEntity()
 {
-  public readonly string Name;
-  public readonly string SiteUrl;
+  public string Name { get; init; }
+  public string SiteUrl { get; init; }
 
   public virtual ICollection<Game> Games { get; init; }
 }
