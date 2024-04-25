@@ -1,7 +1,6 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.V1;
-using Infra;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infra.Repositories;
