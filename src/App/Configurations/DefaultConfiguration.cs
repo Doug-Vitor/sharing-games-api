@@ -1,3 +1,5 @@
+using Infra.Configurations;
+
 namespace App.Configurations;
 
 internal static class DefaultConfiguration
@@ -6,6 +8,7 @@ internal static class DefaultConfiguration
   {
     services.AddControllers();
     services.AddSwagger();
+    services.AddInfrastructureServices();
     return services;
   }
 

@@ -4,6 +4,18 @@
     <ProjectReference Include="..\core\Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" version="8.0.4" />
+    <PackageReference Include="Npgsql" version="8.0.2" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" version="8.0.2" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
