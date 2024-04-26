@@ -6,6 +6,6 @@ namespace Core.Interfaces;
 
 public interface ISanitizerService<T> where T : BaseEntity
 {
-  Task<SuccessResponse<T>> GetByIdAsync(int? id);
-  Task<SuccessResponse<ICollection<T>>> GetAllAsync(SearchParams<T>? searchParams);
+  Task<ActionResponse> GetByIdAsync(int? id);
+  Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams);
 }

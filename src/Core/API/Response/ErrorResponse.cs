@@ -1,2 +1,2 @@
 namespace Core.Response;
-public record ErrorResponse(IDictionary<string, string[]> Messages);
+public record ErrorResponse(int StatusCode, IDictionary<string, string[]> Messages) : ActionResponse(StatusCode);
