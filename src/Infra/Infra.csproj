@@ -5,7 +5,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity" version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" version="8.0.4" />
