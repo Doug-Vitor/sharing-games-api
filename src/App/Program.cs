@@ -8,3 +8,5 @@ builder.Services.AddDefaultConfigurations();
 var app = builder.Build();
 app.UseDefaultConfigurations();
 app.Run();
+
+public partial class Program;
