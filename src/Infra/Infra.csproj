@@ -5,8 +5,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" version="8.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" version="8.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" version="8.0.4" />
