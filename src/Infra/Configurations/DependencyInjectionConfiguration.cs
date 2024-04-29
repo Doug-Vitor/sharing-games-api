@@ -17,7 +17,6 @@ public static class DependencyInjectionConfiguration
     => services.AddDbContext<AppDbContext>((sp, options) =>
     {
       if (sp.GetRequiredService<IHostEnvironment>().IsStaging()) options.UseInMemoryDatabase("InMemoryDatabase");
-      else options.UseNpgsql(Environment.GetEnvironmentVariable(Constants.DatabaseConnectionString))
-                  .UseLazyLoadingProxies();
+      else options.UseNpgsql(Environment.GetEnvironmentVariable(Constants.DatabaseConnectionString));
     });
 }

@@ -7,6 +7,6 @@ namespace Core.Interfaces;
 public interface IReadonlySanitizerService<T, TViewModel> where T : BaseEntity where TViewModel : class
 {
   IReadonlyRepository<T> ReadonlyRepository { get; init; }
-  Task<ActionResponse> GetByIdAsync(int? id);
-  Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams);
+  Task<ActionResponse> GetByIdAsync(int? id, IEnumerable<string>? propertyNamesToBeIncluded);
+  Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams, IEnumerable<string>? propertyNamesToBeIncluded);
 }

@@ -40,8 +40,11 @@ public class SanitizerService<T, TViewModel, TInputModel, TUpdateModel>
     return new ErrorResponse((int)HttpStatusCode.UnprocessableEntity, Validator.Errors);
   }
 
-  public async Task<ActionResponse> GetByIdAsync(int? id) => await ReadonlySanitizerService.GetByIdAsync(id);
-  public async Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams) => await ReadonlySanitizerService.GetAllAsync(searchParams);
+  public async Task<ActionResponse> GetByIdAsync(int? id, IEnumerable<string>? propertyNamesToBeIncluded)
+    => await ReadonlySanitizerService.GetByIdAsync(id, propertyNamesToBeIncluded);
+
+  public async Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams, IEnumerable<string>? propertyNamesToBeIncluded)
+    => await ReadonlySanitizerService.GetAllAsync(searchParams, propertyNamesToBeIncluded);
 
   public async Task<ActionResponse> UpdateAsync(int? id, TUpdateModel inputModel)
   {
