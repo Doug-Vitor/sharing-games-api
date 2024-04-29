@@ -14,17 +14,17 @@ public class ReadonlySanitizerService<T, TViewModel>
   public ReadonlySanitizerService(IReadonlyRepository<T> readonlyRepository)
     => ReadonlyRepository = readonlyRepository;
 
-  public async Task<ActionResponse> GetByIdAsync(int? id)
+  public async Task<ActionResponse> GetByIdAsync(int? id, IEnumerable<string>? propertyNamesToBeIncluded)
   {
     ArgumentNullException.ThrowIfNull(id);
-    T? foundEntity = await ReadonlyRepository.GetByIdAsync(id);
+    T? foundEntity = await ReadonlyRepository.GetByIdAsync(id, propertyNamesToBeIncluded ?? Enumerable.Empty<string>());
     if (foundEntity is null) return new ActionResponse((int)HttpStatusCode.NotFound);
     return new SuccessResponse<TViewModel>((int)HttpStatusCode.OK, (TViewModel)(foundEntity as dynamic));
   }
 
-  public async Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams)
+  public async Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams, IEnumerable<string>? propertyNamesToBeIncluded)
   {
-    IEnumerable<T> entities = await ReadonlyRepository.GetAllAsync(searchParams);
+    IEnumerable<T> entities = await ReadonlyRepository.GetAllAsync(searchParams, propertyNamesToBeIncluded ?? Enumerable.Empty<string>());
     return new SuccessResponse<IEnumerable<TViewModel>>(
       (int)HttpStatusCode.OK,
       entities.Select(entity => (TViewModel)(entity as dynamic))

@@ -1,3 +1,4 @@
+using System.Linq.Dynamic.Core;
 using Core.Entities;
 using Core.Interfaces;
 using Core.V1;
@@ -11,13 +12,28 @@ public class ReadonlyRepository<T> : IReadonlyRepository<T> where T : BaseEntity
 
   public ReadonlyRepository(AppDbContext dbContext) => Collection = dbContext.Set<T>();
 
-  public async Task<T?> GetByIdAsync(int? id) => await Collection.FirstOrDefaultAsync(t => t.Id == id);
+  public async Task<T?> GetByIdAsync(int? id, IEnumerable<string> propertyNamesToBeIncluded)
+    => await IncludeProperties(Collection.Where(x => x.Id == id), propertyNamesToBeIncluded).FirstOrDefaultAsync();
 
-  public async Task<ICollection<T>> GetAllAsync(SearchParams<T>? searchParams)
+  public async Task<ICollection<T>> GetAllAsync(SearchParams<T>? searchParams, IEnumerable<string> propertyNamesToBeIncluded)
   {
-    IQueryable<T> query = Collection.Where(x => x.Id > searchParams.Cursor);
+    int? cursor = searchParams?.Cursor;
+    searchParams?.ApplyCustomPredicates();
 
-    if (searchParams.CustomPredicates is not null) query = query.Where(searchParams.CustomPredicates);
-    return await query.ToListAsync();
+    IQueryable<T> query = Collection.OrderBy($"{searchParams?.SortBy} {searchParams?.SortDirection}")
+                                    .Where(x => x.Id > cursor!)
+                                    .Where(searchParams?.CustomPredicates)
+                                    .Take(searchParams?.PerPage ?? 25);
+
+    return await IncludeProperties(query, propertyNamesToBeIncluded).ToListAsync();
+
+  }
+
+  static IQueryable<T> IncludeProperties(IQueryable<T> query, IEnumerable<string> propertyNamesToBeIncluded)
+  {
+    foreach (string propertyName in propertyNamesToBeIncluded)
+      query = query.Include(propertyName);
+
+    return query.AsNoTracking().AsSplitQuery();
   }
 }

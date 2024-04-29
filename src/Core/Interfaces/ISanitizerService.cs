@@ -13,8 +13,8 @@ public interface ISanitizerService<T, TViewModel, TInputModel, TUpdateModel>
 
   Task<ActionResponse> InsertAsync(TInputModel inputModel);
   Task<ActionResponse> InsertAsync(IEnumerable<TInputModel> inputModels);
-  Task<ActionResponse> GetByIdAsync(int? id);
-  Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams);
+  Task<ActionResponse> GetByIdAsync(int? id, IEnumerable<string>? propertyNamesToBeIncluded);
+  Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams, IEnumerable<string>? propertyNamesToBeIncluded);
   Task<ActionResponse> UpdateAsync(int? id, TUpdateModel inputModel);
   Task<ActionResponse> UpdateAsync(IEnumerable<TUpdateModel> inputModels);
   Task<ActionResponse> RemoveAsync(int? id);
