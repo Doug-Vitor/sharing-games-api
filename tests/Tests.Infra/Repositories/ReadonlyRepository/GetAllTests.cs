@@ -14,21 +14,21 @@ public class GetAllTests : BaseTest<Game>
 
   public GetAllTests() : base()
   {
-    Repository.Setup(r => r.GetAllAsync(null))
+    Repository.Setup(r => r.GetAllAsync(null, null))
               .Returns(async () => _games);
 
-    Repository.Setup(r => r.GetAllAsync(_searchParams))
+    Repository.Setup(r => r.GetAllAsync(_searchParams, null))
               .Returns(async () => _games.Where(g => g.Id > 3).ToList());
   }
 
   [Fact]
   public async Task WhenNoSearchParamsProvidedShouldReturnAListOfEntities()
-    => Assert.NotEmpty(await Repository.Object.GetAllAsync(null));
+    => Assert.NotEmpty(await Repository.Object.GetAllAsync(null, null));
 
   [Fact]
   public async Task WhenCursorProvidedShouldPaginateBasedOnTheCursor()
   {
-    ICollection<Game> games = await Repository.Object.GetAllAsync(_searchParams);
+    ICollection<Game> games = await Repository.Object.GetAllAsync(_searchParams, null);
     Assert.NotEmpty(games);
     Assert.True(games.All(g => g.Id > 3));
   }
@@ -36,7 +36,7 @@ public class GetAllTests : BaseTest<Game>
   [Fact]
   public async Task WhenSearchParamsProvidedShouldFilterResults()
   {
-    ICollection<Game> games = await Repository.Object.GetAllAsync(_searchParams);
+    ICollection<Game> games = await Repository.Object.GetAllAsync(_searchParams, null);
     Assert.NotEmpty(games);
     Assert.True(games.All(g => g.PublisherId == 3));
   }

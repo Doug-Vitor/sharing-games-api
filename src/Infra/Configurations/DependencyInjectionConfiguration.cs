@@ -9,9 +9,14 @@ namespace Infra.Configurations;
 public static class DependencyInjectionConfiguration
 {
   public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
-    => services.AddDatabase()
+  {
+    if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == Environments.Staging)
+      services.AddTransient<AppDbSeeder>();
+
+    return services.AddDatabase()
                .AddScoped(typeof(IReadonlyRepository<>), typeof(ReadonlyRepository<>))
                .AddScoped(typeof(IWritableRepository<>), typeof(WritableRepository<>));
+  }
 
   static IServiceCollection AddDatabase(this IServiceCollection services)
     => services.AddDbContext<AppDbContext>((sp, options) =>
