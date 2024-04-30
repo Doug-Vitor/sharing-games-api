@@ -2,15 +2,13 @@ using System.Text.Json;
 
 public static class JsonExtensions
 {
-  public static T FromJson<T>(this string json)
+  static readonly JsonSerializerOptions options = new()
   {
-    JsonSerializerOptions options = new()
-    {
-      PropertyNameCaseInsensitive = true
-    };
+    PropertyNameCaseInsensitive = true
+  };
 
-    return JsonSerializer.Deserialize<T>(json, options) ?? throw new FormatException();
-  }
+  public static T FromJson<T>(this string json)
+    => JsonSerializer.Deserialize<T>(json, options) ?? throw new FormatException();
 
-  public static string ToJson<T>(this T serializable) => JsonSerializer.Serialize<T>(serializable);
+  public static string ToJson<T>(this T serializable) => JsonSerializer.Serialize(serializable, options);
 }

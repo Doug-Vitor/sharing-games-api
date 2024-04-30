@@ -20,8 +20,7 @@ public class AuthenticatedTests : BaseUserTests
   [Fact]
   public async Task WhenAuthenticatedShouldReturnAuthenticatedUser()
   {
-    await Setup();
-    await Client.PostAsJsonAsync("Users/SignIn", SignInModel);
+    await SetupWithAutentication();
 
     var response = await GetAndParseAsync<SuccessResponse<UserViewModel>>(AuthenticatedUserEndpoint);
     Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
