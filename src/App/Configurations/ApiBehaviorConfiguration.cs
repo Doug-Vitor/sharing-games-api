@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Core.Response;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,13 @@ internal static class ApiBehaviurConfiguration
 {
   internal static IServiceCollection AddApiBehavior(this IServiceCollection services)
   {
-    services.AddVersioning().AddControllers().ConfigureApiBehaviorOptions(options =>
-        {
-          options.InvalidModelStateResponseFactory = ConfigureInvalidModelStateResponseFactory;
-        });
+    services.AddVersioning()
+            .AddControllers()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+              options.InvalidModelStateResponseFactory = ConfigureInvalidModelStateResponseFactory;
+            })
+            .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
     return services;
   }
 
