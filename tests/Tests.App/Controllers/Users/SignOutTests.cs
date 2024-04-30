@@ -18,9 +18,7 @@ public class SignOutTests : BaseUserTests
   [Fact]
   public async Task WhenAuthenticatedShouldReturnNoContent()
   {
-    await Setup();
-    await Client.PostAsJsonAsync("/api/Users/SignIn", SignInModel);
-
+    await SetupWithAutentication();
     var response = await PostAndParseAsync<ActionResponse>();
     Assert.Equal((int)HttpStatusCode.NoContent, response.StatusCode);
   }
