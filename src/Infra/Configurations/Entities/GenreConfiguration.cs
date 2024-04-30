@@ -7,5 +7,5 @@ namespace Infra.Configurations;
 internal class GenreConfiguration : IEntityTypeConfiguration<Genre>
 {
   public void Configure(EntityTypeBuilder<Genre> builder)
-    => builder.HasMany(g => g.Games).WithMany(g => g.Genres);
+    => builder.HasMany(g => g.Games).WithMany(g => g.Genres).UsingEntity<GameGenre>();
 }
