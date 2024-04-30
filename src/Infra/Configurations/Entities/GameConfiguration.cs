@@ -11,6 +11,6 @@ internal class GameConfiguration : IEntityTypeConfiguration<Game>
     builder.Property(g => g.ReleasedAt).IsRequired();
     builder.HasOne(g => g.Publisher).WithMany(p => p.Games).HasForeignKey(p => p.PublisherId);
     builder.HasMany(g => g.Images).WithOne(i => i.Game).HasForeignKey(i => i.GameId);
-    builder.HasMany(g => g.Genres).WithMany(g => g.Games);
+    builder.HasMany(g => g.Genres).WithMany(g => g.Games).UsingEntity<GameGenre>();
   }
 }

@@ -44,14 +44,15 @@ public class AppDbSeeder(AppDbContext dbContext)
     await _dbContext.SaveChangesAsync();
 
     Random random = new();
+    List<GameGenre> gameGenres = [];
+
     foreach (var game in games)
     {
       int genreId = genres.ElementAt(random.Next(0, genres.Count - 1)).Id;
-      await _dbContext.Database.ExecuteSqlAsync(
-        $"INSERT INTO \"GameGenre\"(\"GenresId\", \"GamesId\") VALUES ({genreId}, {game.Id});"
-      );
+      gameGenres.Add(new() { GenresId = genreId, GamesId = game.Id });
     }
 
+    _dbContext.AddRange(gameGenres);
     await _dbContext.SaveChangesAsync();
   }
 }
