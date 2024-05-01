@@ -15,10 +15,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\infra\Infra.csproj" />
-    <ProjectReference Include="..\core\Core.csproj" />
-    <ProjectReference Include="..\services\Services.csproj" />
-    <InternalsVisibleTo Include="..\..\tests\Tests.App\Tests.App.csproj" />
+    <ProjectReference Include="..\Infra\Infra.csproj" />
+    <ProjectReference Include="..\Core\Core.csproj" />
+    <ProjectReference Include="..\Services\Services.csproj" />
+    <InternalsVisibleTo Include="..\..\Tests\Tests.App\Tests.App.csproj" />
   </ItemGroup>
 
 </Project>
