@@ -13,7 +13,6 @@ public static class DependencyInjectionConfiguration
 {
   public static IServiceCollection AddServices(this IServiceCollection services) =>
     services.ConfigureAuthentication()
-            .AddTransient<HttpContextAccessor>()
             .AddTransient<Interfaces.IAuthenticationService, Identity.AuthenticationService>()
             .AddValidatorsFromAssemblyContaining<IAppValidator>()
             .AddTransient(typeof(IValidatorService<,>), typeof(ValidatorService<,>))

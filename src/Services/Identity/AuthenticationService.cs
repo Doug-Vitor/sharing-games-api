@@ -12,9 +12,9 @@ public class AuthenticationService : IAuthenticationService
 {
   readonly UserManager<User> _userManager;
   readonly SignInManager<User> _signInManager;
-  readonly HttpContextAccessor _contextAccessor;
+  readonly IHttpContextAccessor _contextAccessor;
 
-  public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, HttpContextAccessor contextAccessor)
+  public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, IHttpContextAccessor contextAccessor)
     => (_userManager, _signInManager, _contextAccessor) = (userManager, signInManager, contextAccessor);
 
   public async Task<ActionResponse> GetAuthenticatedUserAsync()
