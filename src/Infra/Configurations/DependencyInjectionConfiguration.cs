@@ -15,7 +15,7 @@ public static class DependencyInjectionConfiguration
                .AddDatabase()
                .AddScoped(typeof(IReadonlyRepository<>), typeof(ReadonlyRepository<>))
                .AddScoped(typeof(IWritableRepository<>), typeof(WritableRepository<>))
-               .AddSingleton<AppDbSeeder>();
+               .AddScoped<AppDbSeeder>();
 
   static IServiceCollection AddDatabase(this IServiceCollection services)
     => services.AddDbContext<AppDbContext>((sp, options) =>
