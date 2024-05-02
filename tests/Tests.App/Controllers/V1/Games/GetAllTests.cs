@@ -4,7 +4,7 @@ using Core.Response;
 using Core.V1.DTOs;
 using Microsoft.EntityFrameworkCore;
 
-namespace Tests.App.Controllers.V1;
+namespace Tests.App.Controllers.V1.Games;
 
 public class GetAllTests : BaseTest
 {

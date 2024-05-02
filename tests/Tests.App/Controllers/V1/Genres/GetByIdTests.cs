@@ -3,9 +3,9 @@ using Core.Entities;
 using Core.Response;
 using Core.V1.DTOs;
 
-namespace Tests.App.Controllers.V1.Games;
+namespace Tests.App.Controllers.V1.Genres;
 
-public class GetByIdTests() : BaseTest()
+public class GetByIdTests() : AuthenticatedBaseTest("/api/v1/genres")
 {
   [Fact]
   public async Task WhenUnauthenticatedShouldReturnUnauthorized()
@@ -26,11 +26,11 @@ public class GetByIdTests() : BaseTest()
   public async Task WhenValidIdProvidedShouldReturnTheCorrespondingGame()
   {
     await SetupWithAutentication();
-    Game game = Context.Set<Game>().First();
+    Genre genre = Context.Set<Genre>().First();
 
-    var response = await GetAndParseAsync<SuccessResponse<GameViewModel>>($"{BaseAddress}/{game.Id}");
+    var response = await GetAndParseAsync<SuccessResponse<NamedViewModel>>($"{BaseAddress}/{genre.Id}");
     Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-    ApplyDefaultAsserts(game, response.Data);
+    Assert.Equal(genre.Id, response.Data.Id);
+    Assert.Equal(genre.Name, response.Data.Name);
   }
-
 }

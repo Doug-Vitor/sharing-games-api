@@ -3,7 +3,7 @@
 using Core.Entities;
 using Core.V1.DTOs;
 
-namespace Tests.App.Controllers.V1;
+namespace Tests.App.Controllers.V1.Games;
 
 public abstract class BaseTest() : AuthenticatedBaseTest("/api/v1/Games")
 {
