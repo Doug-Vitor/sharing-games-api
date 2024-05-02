@@ -33,5 +33,4 @@ public class GetByIdTests() : AuthenticatedBaseTest("/api/v1/genres")
     Assert.Equal(genre.Id, response.Data.Id);
     Assert.Equal(genre.Name, response.Data.Name);
   }
-
 }
