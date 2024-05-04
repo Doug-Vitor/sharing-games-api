@@ -2,6 +2,7 @@ using System.Net;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Response;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Services;
 
@@ -51,13 +52,29 @@ public class WritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel>
     );
   }
 
-  public Task<ActionResponse> RemoveAsync(int? id)
+  public async Task<ActionResponse> RemoveAsync(int? id)
   {
-    throw new NotImplementedException();
+    if (id.HasValue)
+    {
+      await WritableRepository.RemoveAsync(id.Value);
+      return new((int)HttpStatusCode.NoContent);
+    }
+
+    return GetErrorResponse(nameof(id));
   }
 
-  public Task<ActionResponse> RemoveAsync(IEnumerable<int>? ids)
+  public async Task<ActionResponse> RemoveAsync(IEnumerable<int>? ids)
   {
-    throw new NotImplementedException();
+    if (ids.IsNullOrEmpty()) return GetErrorResponse(nameof(ids));
+    await WritableRepository.RemoveAsync(ids!);
+    return new((int)HttpStatusCode.NoContent);
   }
+
+  static ErrorResponse GetErrorResponse(string key) => new(
+    (int)HttpStatusCode.BadRequest,
+    new Dictionary<string, string[]>()
+    {
+      { key, [$"Invalid {key} provided"] }
+    }
+  );
 }
