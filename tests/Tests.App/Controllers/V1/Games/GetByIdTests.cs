@@ -1,7 +1,6 @@
 using System.Net;
 using Core.Entities;
 using Core.Response;
-using Core.V1.DTOs;
 
 namespace Tests.App.Controllers.V1.Games;
 
@@ -18,7 +17,7 @@ public class GetByIdTests() : BaseTest()
   public async Task WhenInvalidIdProvidedShouldReturnNotFound()
   {
     await SetupWithAutentication();
-    var response = await GetAndParseAsync<ErrorResponse>(BaseAddress + "/0");
+    var response = await GetAndParseAsync<ErrorResponse>("/0");
     Assert.Equal((int)HttpStatusCode.NotFound, response.StatusCode);
   }
 
@@ -28,9 +27,12 @@ public class GetByIdTests() : BaseTest()
     await SetupWithAutentication();
     Game game = Context.Set<Game>().First();
 
-    var response = await GetAndParseAsync<SuccessResponse<GameViewModel>>($"{BaseAddress}/{game.Id}");
+    var response = await GetSingleAndValidateAsync($"/{game.Id}");
     Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-    ApplyDefaultAsserts(game, response.Data);
+    Assert.Equal(game.Name, response.Data.Name);
+    Assert.Equal(game.Synopsis, response.Data.Synopsis);
+    Assert.Equal(game.PublisherId, response.Data.Publisher.Id);
+    Assert.Equal(game.ReleasedAt, response.Data.ReleasedAt);
   }
 
 }

@@ -1,11 +1,10 @@
 using System.Net;
 using Core.Entities;
 using Core.Response;
-using Core.V1.DTOs;
 
 namespace Tests.App.Controllers.V1.Genres;
 
-public class GetByIdTests() : AuthenticatedBaseTest("/api/v1/genres")
+public class GetByIdTests() : BaseTest()
 {
   [Fact]
   public async Task WhenUnauthenticatedShouldReturnUnauthorized()
@@ -18,7 +17,7 @@ public class GetByIdTests() : AuthenticatedBaseTest("/api/v1/genres")
   public async Task WhenInvalidIdProvidedShouldReturnNotFound()
   {
     await SetupWithAutentication();
-    var response = await GetAndParseAsync<ErrorResponse>(BaseAddress + "/0");
+    var response = await GetAndParseAsync<ErrorResponse>("/0");
     Assert.Equal((int)HttpStatusCode.NotFound, response.StatusCode);
   }
 
@@ -28,8 +27,7 @@ public class GetByIdTests() : AuthenticatedBaseTest("/api/v1/genres")
     await SetupWithAutentication();
     Genre genre = Context.Set<Genre>().First();
 
-    var response = await GetAndParseAsync<SuccessResponse<NamedViewModel>>($"{BaseAddress}/{genre.Id}");
-    Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
+    var response = await GetSingleAndValidateAsync($"/{genre.Id}");
     Assert.Equal(genre.Id, response.Data.Id);
     Assert.Equal(genre.Name, response.Data.Name);
   }
