@@ -29,13 +29,25 @@ public abstract class BaseTest : IClassFixture<WebApplicationFactory<Program>>
 
   protected async Task<T> GetAndParseAsync<T>(string? requestUrl = "")
   {
-    HttpResponseMessage response = await Client.GetAsync(requestUrl);
+    HttpResponseMessage response = await Client.GetAsync(BaseAddress + requestUrl);
     return await ParseAsync<T>(response);
   }
 
   protected async Task<T> PostAndParseAsync<T>(object body = null, string? requestUrl = "")
   {
-    HttpResponseMessage response = await Client.PostAsJsonAsync(requestUrl, body);
+    HttpResponseMessage response = await Client.PostAsJsonAsync(BaseAddress + requestUrl, body);
+    return await ParseAsync<T>(response);
+  }
+
+  protected async Task<T> PatchAndParseAsync<T>(object body = null, string? requestUrl = "")
+  {
+    HttpResponseMessage response = await Client.PatchAsJsonAsync(BaseAddress + requestUrl, body);
+    return await ParseAsync<T>(response);
+  }
+
+  protected async Task<T> DeleteAndParseAsync<T>(string? requestUrl = "")
+  {
+    HttpResponseMessage response = await Client.DeleteAsync(BaseAddress + requestUrl);
     return await ParseAsync<T>(response);
   }
 
