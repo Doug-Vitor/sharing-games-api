@@ -1,4 +1,5 @@
 using System.Net;
+using System.Security.Claims;
 using Core.Response;
 using Core.V1.DTOs;
 using Infra.Entities;
@@ -13,6 +14,7 @@ public class AuthenticationService : IAuthenticationService
   readonly UserManager<User> _userManager;
   readonly SignInManager<User> _signInManager;
   readonly IHttpContextAccessor _contextAccessor;
+  public string? AuthenticatedUserId => _contextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
 
   public AuthenticationService(UserManager<User> userManager, SignInManager<User> signInManager, IHttpContextAccessor contextAccessor)
     => (_userManager, _signInManager, _contextAccessor) = (userManager, signInManager, contextAccessor);

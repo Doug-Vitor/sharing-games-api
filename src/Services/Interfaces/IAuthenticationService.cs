@@ -5,6 +5,7 @@ namespace Services.Interfaces;
 
 public interface IAuthenticationService
 {
+  string? AuthenticatedUserId { get; }
   public Task<ActionResponse> GetAuthenticatedUserAsync();
   public Task<ActionResponse> SignUpAsync(SignUpInputModel user);
   public Task<ActionResponse> SignInAsync(SignInInputModel user);

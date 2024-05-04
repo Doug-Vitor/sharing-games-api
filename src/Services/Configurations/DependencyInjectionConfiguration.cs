@@ -18,7 +18,8 @@ public static class DependencyInjectionConfiguration
             .AddTransient(typeof(IValidatorService<,>), typeof(ValidatorService<,>))
             .AddScoped(typeof(IReadonlySanitizerService<,>), typeof(ReadonlySanitizerService<,>))
             .AddScoped(typeof(IWritableSanitizerService<,,,>), typeof(WritableSanitizerService<,,,>))
-            .AddScoped(typeof(ISanitizerService<,,,>), typeof(SanitizerService<,,,>));
+            .AddScoped(typeof(ISanitizerService<,,,>), typeof(SanitizerService<,,,>))
+            .AddScoped(typeof(IAuthenticatedSanitizerService<,,,>), typeof(AuthenticatedSanitizerService<,,,>));
 
   static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
   {
