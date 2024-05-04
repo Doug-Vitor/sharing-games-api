@@ -25,14 +25,14 @@ public class SanitizerService<T, TViewModel, TInputModel, TUpdateModel>
     Validator = validator;
   }
 
-  public async Task<ActionResponse> InsertAsync(TInputModel inputModel)
+  public virtual async Task<ActionResponse> InsertAsync(TInputModel inputModel)
   {
     await Validator.ValidateAsync(inputModel);
     if (Validator.IsValid) return await WritableSanitizerService.InsertAsync(inputModel);
     return new ErrorResponse((int)HttpStatusCode.UnprocessableEntity, Validator.Errors);
   }
 
-  public async Task<ActionResponse> InsertAsync(IEnumerable<TInputModel> inputModels)
+  public virtual async Task<ActionResponse> InsertAsync(IEnumerable<TInputModel> inputModels)
   {
     await Validator.ValidateAsync(inputModels);
     if (Validator.IsValid) return await WritableSanitizerService.InsertAsync(inputModels);
@@ -40,26 +40,26 @@ public class SanitizerService<T, TViewModel, TInputModel, TUpdateModel>
     return new ErrorResponse((int)HttpStatusCode.UnprocessableEntity, Validator.Errors);
   }
 
-  public async Task<ActionResponse> GetByIdAsync(int? id, IEnumerable<string>? propertyNamesToBeIncluded)
+  public virtual async Task<ActionResponse> GetByIdAsync(int? id, IEnumerable<string>? propertyNamesToBeIncluded)
     => await ReadonlySanitizerService.GetByIdAsync(id, propertyNamesToBeIncluded);
 
-  public async Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams, IEnumerable<string>? propertyNamesToBeIncluded)
+  public virtual async Task<ActionResponse> GetAllAsync(SearchParams<T>? searchParams, IEnumerable<string>? propertyNamesToBeIncluded)
     => await ReadonlySanitizerService.GetAllAsync(searchParams, propertyNamesToBeIncluded);
 
-  public async Task<ActionResponse> UpdateAsync(int? id, TUpdateModel inputModel)
+  public virtual async Task<ActionResponse> UpdateAsync(int? id, TUpdateModel inputModel)
   {
     await Validator.ValidateAsync(inputModel);
     if (Validator.IsValid) return await WritableSanitizerService.UpdateAsync(id, inputModel);
     return new ErrorResponse((int)HttpStatusCode.UnprocessableEntity, Validator.Errors);
   }
 
-  public async Task<ActionResponse> UpdateAsync(IEnumerable<TUpdateModel> inputModels)
+  public virtual async Task<ActionResponse> UpdateAsync(IEnumerable<TUpdateModel> inputModels)
   {
     await Validator.ValidateAsync(inputModels);
     if (Validator.IsValid) return await WritableSanitizerService.UpdateAsync(inputModels);
     return new ErrorResponse((int)HttpStatusCode.UnprocessableEntity, Validator.Errors);
   }
 
-  public async Task<ActionResponse> RemoveAsync(int? id) => await WritableSanitizerService.RemoveAsync(id);
-  public async Task<ActionResponse> RemoveAsync(IEnumerable<int>? ids) => await WritableSanitizerService.RemoveAsync(ids);
+  public virtual async Task<ActionResponse> RemoveAsync(int? id) => await WritableSanitizerService.RemoveAsync(id);
+  public virtual async Task<ActionResponse> RemoveAsync(IEnumerable<int>? ids) => await WritableSanitizerService.RemoveAsync(ids);
 }
