@@ -1,16 +1,14 @@
 using System.Net;
 using Core.Entities;
-using Core.Response;
-using Core.V1.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Tests.App.Controllers.V1.Genres;
 
-public class GetAllTests : AuthenticatedBaseTest
+public class GetAllTests : BaseTest
 {
   readonly DbSet<Genre> _genres;
 
-  public GetAllTests() : base("/api/v1/genres") => _genres = Context.Set<Genre>();
+  public GetAllTests() : base() => _genres = Context.Set<Genre>();
 
   [Fact]
   public async Task WhenUnauthenticatedShouldReturnUnauthorized()
@@ -23,10 +21,7 @@ public class GetAllTests : AuthenticatedBaseTest
   public async Task WhenNoSearchParamsProvidedShouldReturnFromFirst()
   {
     await SetupWithAutentication();
-
-    var response = await GetAndParseAsync<SuccessResponse<IEnumerable<NamedViewModel>>>();
-    Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-    Assert.NotEmpty(response.Data);
+    await GetManyAndValidateAsync();
   }
 
   [Fact]
@@ -35,10 +30,8 @@ public class GetAllTests : AuthenticatedBaseTest
     await SetupWithAutentication();
 
     int cursor = _genres.OrderBy(g => g.Id).First().Id + 1;
-    var response = await GetAndParseAsync<SuccessResponse<IEnumerable<NamedViewModel>>>($"{BaseAddress}?cursor={cursor}");
 
-    Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-    Assert.NotEmpty(response.Data);
+    var response = await GetManyAndValidateAsync($"?cursor={cursor}");
     Assert.True(response.Data.All(game => game.Id > cursor));
   }
 
@@ -48,10 +41,8 @@ public class GetAllTests : AuthenticatedBaseTest
     await SetupWithAutentication();
 
     string name = _genres.First().Name;
-    var response = await GetAndParseAsync<SuccessResponse<IEnumerable<NamedViewModel>>>($"{BaseAddress}?name={name}");
 
-    Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
-    Assert.NotEmpty(response.Data);
+    var response = await GetManyAndValidateAsync($"?name={name}");
     Assert.True(response.Data.All(game => game.Name.Contains(name, StringComparison.InvariantCultureIgnoreCase)));
   }
 }

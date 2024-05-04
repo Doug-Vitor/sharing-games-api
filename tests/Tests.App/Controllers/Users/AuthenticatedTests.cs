@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Core.Response;
 using Core.V1.DTOs;
 
@@ -7,13 +6,13 @@ namespace Tests.App.Controllers;
 
 public class AuthenticatedTests : BaseUserTests
 {
-  const string AuthenticatedUserEndpoint = "Users/Me";
+  const string AuthenticatedUserEndpoint = "/Me";
   public AuthenticatedTests() : base() { }
 
   [Fact]
   public async Task WhenUnauthenticatedShouldReturnUnauthorized()
   {
-    var response = await Client.GetAsync(AuthenticatedUserEndpoint);
+    var response = await Client.GetAsync(BaseAddress + AuthenticatedUserEndpoint);
     Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
   }
 

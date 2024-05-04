@@ -11,9 +11,7 @@ public abstract class AuthenticatedBaseTest : BaseTest
   protected readonly IAuthenticationService AuthService;
 
   public AuthenticatedBaseTest(string baseAddress) : base(baseAddress)
-  {
-    AuthService = Factory.Server.Services.GetRequiredService<IAuthenticationService>();
-  }
+    => AuthService = Factory.Server.Services.GetRequiredService<IAuthenticationService>();
 
   protected async Task Setup()
   {
