@@ -25,7 +25,7 @@ public class GetByIdTests() : BaseTest()
   public async Task WhenValidIdProvidedShouldReturnTheCorrespondingGame()
   {
     await SetupWithAutentication();
-    Game game = Context.Set<Game>().First();
+    Game game = DbSet.First();
 
     var response = await GetSingleAndValidateAsync($"/{game.Id}");
     Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);

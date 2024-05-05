@@ -4,12 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Tests.App.Controllers.V1.Games;
 
-public class GetAllTests : BaseTest
+public class GetAllTests() : BaseTest()
 {
-  readonly DbSet<Game> games;
-
-  public GetAllTests() : base() => games = Context.Set<Game>();
-
   [Fact]
   public async Task WhenUnauthenticatedShouldReturnUnauthorized()
   {
@@ -28,7 +24,7 @@ public class GetAllTests : BaseTest
   public async Task WhenCursorProvidedShouldPaginateTheResponse()
   {
     await SetupWithAutentication();
-    int cursor = games.OrderBy(g => g.Id).First().Id + 1;
+    int cursor = DbSet.OrderBy(g => g.Id).First().Id + 1;
 
     var response = await GetManyAndValidateAsync($"?cursor={cursor}");
     Assert.True(response.Data.All(game => game.Id > cursor));
@@ -53,7 +49,7 @@ public class GetAllTests : BaseTest
   {
     await SetupWithAutentication();
 
-    int publisherId = games.First().PublisherId;
+    int publisherId = DbSet.First().PublisherId;
 
     var response = await GetManyAndValidateAsync($"?publisherId={publisherId}");
     Assert.True(response.Data.All(game => game.Publisher.Id == publisherId));

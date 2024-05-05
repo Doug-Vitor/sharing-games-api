@@ -1,10 +1,20 @@
 using System.Net;
+using Core.Entities;
 using Core.Response;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tests.App.Controllers.V1;
 
-public abstract class BaseTest<TViewModel>(string controllerName) : AuthenticatedBaseTest($"/api/v1/{controllerName}")
+public abstract class BaseTest<T, TViewModel> : AuthenticatedBaseTest
+  where T : BaseEntity where TViewModel : class
 {
+  protected readonly DbSet<T> DbSet;
+
+  public BaseTest(string controllerName) : base($"/api/v1/{controllerName}")
+  {
+    DbSet = Context.Set<T>();
+  }
+
   protected async Task<SuccessResponse<TViewModel>> GetSingleAndValidateAsync(string? requestUrl = "")
   {
     var response = await GetAndParseAsync<SuccessResponse<TViewModel>>(requestUrl);
