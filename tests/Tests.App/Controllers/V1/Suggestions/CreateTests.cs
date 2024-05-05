@@ -32,7 +32,7 @@ public class CreateTests() : BaseTest()
     await SetupWithAutentication();
     RequestInputModel inputModel = new() { Title = "My awesome suggestion", Description = "This is an awesome suggestion!" };
 
-    var response = await PostAndValidatAsync(inputModel);
+    var response = await PostAndValidateAsync(inputModel);
     Assert.Equal(inputModel.Title, response.Data.Title);
     Assert.Equal(inputModel.Description, response.Data.Description);
     Assert.IsType<int>(response.Data.Id);
