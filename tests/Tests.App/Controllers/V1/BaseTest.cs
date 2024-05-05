@@ -32,7 +32,7 @@ public abstract class BaseTest<T, TViewModel> : AuthenticatedBaseTest
     return response;
   }
 
-  protected async Task<SuccessResponse<TViewModel>> PostAndValidatAsync(object body = null, string? requestUrl = "")
+  protected async Task<SuccessResponse<TViewModel>> PostAndValidateAsync(object body = null, string? requestUrl = "")
   {
     var response = await PostAndParseAsync<SuccessResponse<TViewModel>>(body, requestUrl);
 
