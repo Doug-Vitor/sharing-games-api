@@ -5,6 +5,7 @@ using Infra.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Services.Sanitizers;
 using Services.Validators;
 
 namespace Services.Configurations;
@@ -19,7 +20,8 @@ public static class DependencyInjectionConfiguration
             .AddScoped(typeof(IReadonlySanitizerService<,>), typeof(ReadonlySanitizerService<,>))
             .AddScoped(typeof(IWritableSanitizerService<,,,>), typeof(WritableSanitizerService<,,,>))
             .AddScoped(typeof(ISanitizerService<,,,>), typeof(SanitizerService<,,,>))
-            .AddScoped(typeof(IAuthenticatedSanitizerService<,,,>), typeof(AuthenticatedSanitizerService<,,,>));
+            .AddScoped(typeof(IAuthenticatedSanitizerService<,,,>), typeof(AuthenticatedSanitizerService<,,,>))
+            .AddScoped<GameRequestSanitizerService>();
 
   static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
   {
