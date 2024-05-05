@@ -17,32 +17,32 @@ public class AuthenticatedSanitizerService<T, TViewModel, TInputModel, TUpdateMo
   validator
 ), IAuthenticatedSanitizerService<T, TViewModel, TInputModel, TUpdateModel> where T : BaseEntity, IOwnedByUser where TViewModel : ViewModel where TInputModel : class, IOwnedByUser where TUpdateModel : class, IOwnedByUser
 {
-  readonly string? _authenticatedUserId = authService.AuthenticatedUserId;
+  protected readonly string? AuthenticatedUserId = authService.AuthenticatedUserId;
 
   public override Task<ActionResponse> InsertAsync(TInputModel inputModel)
   {
-    inputModel.UserId = _authenticatedUserId;
+    inputModel.UserId = AuthenticatedUserId;
     return base.InsertAsync(inputModel);
   }
 
   public override Task<ActionResponse> InsertAsync(IEnumerable<TInputModel> inputModels)
   {
     foreach (var inputModel in inputModels)
-      inputModel.UserId = _authenticatedUserId;
+      inputModel.UserId = AuthenticatedUserId;
 
     return base.InsertAsync(inputModels);
   }
 
   public override Task<ActionResponse> UpdateAsync(int? id, TUpdateModel inputModel)
   {
-    inputModel.UserId = _authenticatedUserId;
+    inputModel.UserId = AuthenticatedUserId;
     return base.UpdateAsync(id, inputModel);
   }
 
   public override Task<ActionResponse> UpdateAsync(IEnumerable<TUpdateModel> inputModels)
   {
     foreach (var inputModel in inputModels)
-      inputModel.UserId = _authenticatedUserId;
+      inputModel.UserId = AuthenticatedUserId;
 
     return base.UpdateAsync(inputModels);
   }
