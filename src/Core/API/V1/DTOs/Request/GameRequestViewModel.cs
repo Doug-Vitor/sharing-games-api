@@ -15,5 +15,6 @@ public class GameRequestViewModel : RequestViewModel
     Description = request.Description,
     AnswerStatus = (request.Answer?.Status ?? GameRequestAnswerStatus.Pending).ToString(),
     Game = null, // temp
+    UserId = request.UserId,
   };
 }

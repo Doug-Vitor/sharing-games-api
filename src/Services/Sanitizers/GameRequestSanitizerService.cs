@@ -41,7 +41,6 @@ public class GameRequestSanitizerService(
   public new async Task<ActionResponse> GetAllAsync(GameRequestSearchParams searchParams, IEnumerable<string>? propertyNamesToBeIncluded)
   {
     searchParams.AuthenticatedUserId = AuthenticatedUserId;
-    System.Console.WriteLine(searchParams.ToJson());
     return await base.GetAllAsync(searchParams, propertyNamesToBeIncluded);
   }
 
