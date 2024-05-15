@@ -19,7 +19,7 @@ public abstract class BaseTest<T, TViewModel> : AuthenticatedBaseTest
   {
     var response = await GetAndParseAsync<SuccessResponse<TViewModel>>(requestUrl);
 
-    Assert.Equal(response.StatusCode, (int)HttpStatusCode.OK);
+    Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
     return response;
   }
 
@@ -27,7 +27,7 @@ public abstract class BaseTest<T, TViewModel> : AuthenticatedBaseTest
   {
     var response = await GetAndParseAsync<SuccessResponse<IEnumerable<TViewModel>>>(requestUrl);
 
-    Assert.Equal(response.StatusCode, (int)HttpStatusCode.OK);
+    Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
     Assert.NotEmpty(response.Data);
     return response;
   }
@@ -36,22 +36,22 @@ public abstract class BaseTest<T, TViewModel> : AuthenticatedBaseTest
   {
     var response = await PostAndParseAsync<SuccessResponse<TViewModel>>(body, requestUrl);
 
-    Assert.Equal(response.StatusCode, (int)HttpStatusCode.Created);
+    Assert.Equal((int)HttpStatusCode.Created, response.StatusCode);
     return response;
   }
 
-  protected async Task<SuccessResponse<TViewModel>> UpdateAndValidateAsync(object body = null, string? requestUrl = "")
+  protected async Task<SuccessResponse<TViewModel>> UpdateAndValidateAsync(string requestUrl, object body = null)
   {
     var response = await PatchAndParseAsync<SuccessResponse<TViewModel>>(body, requestUrl);
 
-    Assert.Equal(response.StatusCode, (int)HttpStatusCode.OK);
+    Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
     return response;
   }
 
-  protected async Task<ActionResponse> DeleteAndValidateAsync(string? requestUrl = "")
+  protected async Task<ActionResponse> DeleteAndValidateAsync(string requestUrl)
   {
     var response = await GetAndParseAsync<ActionResponse>(requestUrl);
-    Assert.Equal(response.StatusCode, (int)HttpStatusCode.NoContent);
+    Assert.Equal((int)HttpStatusCode.NoContent, response.StatusCode);
     return response;
   }
 }

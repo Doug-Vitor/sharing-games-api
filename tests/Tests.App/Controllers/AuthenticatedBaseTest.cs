@@ -1,7 +1,6 @@
 using System.Net.Http.Json;
+using Core.Response;
 using Core.V1.DTOs;
-using Infra.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Interfaces;
 
@@ -11,7 +10,7 @@ public abstract class AuthenticatedBaseTest : BaseTest
 {
   protected SignInInputModel SignInModel { get; private set; }
   protected readonly IAuthenticationService AuthService;
-  protected User AuthenticatedUser { get; private set; }
+  protected UserViewModel AuthenticatedUser { get; private set; }
 
   public AuthenticatedBaseTest(string baseAddress) : base(baseAddress)
     => AuthService = Factory.Server.Services.GetRequiredService<IAuthenticationService>();
@@ -29,7 +28,7 @@ public abstract class AuthenticatedBaseTest : BaseTest
   protected virtual async Task SetupWithAutentication()
   {
     await Setup();
-    await Client.PostAsJsonAsync("/api/Users/SignIn", SignInModel);
-    AuthenticatedUser = await Context.Users.LastAsync();
+    var response = await Client.PostAsJsonAsync("/api/Users/SignIn", SignInModel);
+    AuthenticatedUser = (await ParseAsync<SuccessResponse<UserViewModel>>(response)).Data;
   }
 }
