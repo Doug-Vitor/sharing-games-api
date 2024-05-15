@@ -10,8 +10,9 @@ public class GameRequestUpdateValidator : SingleValidator<GameRequestUpdateModel
     RuleFor(r => r.GameRequestAnswerId).Custom((_, context) =>
     {
       context.RootContextData.TryGetValue(Constants.GameRequestContextSharedKey, out object? status);
-      if (Enum.Parse<GameRequestAnswerStatus>(status as string) != GameRequestAnswerStatus.Pending)
-        context.AddFailure("Unable to update a request that was already answered.");
+
+      if ((GameRequestAnswerStatus)status == GameRequestAnswerStatus.Pending) return;
+      context.AddFailure("Unable to update a request that was already answered.");
     });
   }
 }
@@ -23,8 +24,9 @@ public class GameRequestListUpdateValidator : ListValidator<GameRequestUpdateMod
     RuleForEach(r => r.Select(r => r.GameRequestAnswerId)).Custom((_, context) =>
     {
       context.RootContextData.TryGetValue(Constants.GameRequestContextSharedKey, out object? status);
-      if (Enum.Parse<GameRequestAnswerStatus>(status as string) != GameRequestAnswerStatus.Pending)
-        context.AddFailure("Unable to update a request that was already answered.");
+
+      if ((GameRequestAnswerStatus)status == GameRequestAnswerStatus.Pending) return;
+      context.AddFailure("Unable to update a request that was already answered.");
     });
   }
 }
