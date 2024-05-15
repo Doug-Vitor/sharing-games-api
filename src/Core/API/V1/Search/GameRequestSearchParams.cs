@@ -8,6 +8,8 @@ public class GameRequestSearchParams() : SearchParams<GameRequest>()
   public string? UserId { get; set; }
   public string? AuthenticatedUserId { get; set; }
 
-  public override void ApplyCustomPredicates()
-    => CustomPredicates = request => UserId == null ? request.UserId == AuthenticatedUserId : request.Answer.Status == GameRequestAnswerStatus.Accepted;
+  public override void ApplyCustomPredicates() => CustomPredicates = request =>
+    UserId == null
+      ? request.UserId == AuthenticatedUserId
+      : request.UserId == UserId && request.Answer.Status == GameRequestAnswerStatus.Accepted;
 }

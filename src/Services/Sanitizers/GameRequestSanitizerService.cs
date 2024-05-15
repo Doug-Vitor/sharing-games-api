@@ -5,7 +5,10 @@ using Core.V1;
 using Core.V1.DTOs;
 using FluentValidation;
 using Services.Interfaces;
+
 namespace Services.Sanitizers;
+
+delegate ActionResponse OnSuccessHandler(ActionResponse response);
 
 public class GameRequestSanitizerService(
   IReadonlySanitizerService<GameRequest, GameRequestViewModel> readonlySanitizerService,
@@ -26,15 +29,21 @@ public class GameRequestSanitizerService(
 
   public override async Task<ActionResponse> InsertAsync(GameRequestInputModel inputModel)
   {
-    var result = await base.InsertAsync(inputModel) as SuccessResponse<GameRequestViewModel>;
-    await CreateAnswers(new List<int>() { result.Data.Id.Value });
+    var result = await base.InsertAsync(inputModel);
+
+    if (result is SuccessResponse<GameRequestViewModel> response)
+      await CreateAnswers(new List<int>() { response.Data.Id.Value });
+
     return result;
   }
 
   public override async Task<ActionResponse> InsertAsync(IEnumerable<GameRequestInputModel> inputModels)
   {
-    var result = await base.InsertAsync(inputModels) as SuccessResponse<IEnumerable<GameRequestViewModel>>;
-    await CreateAnswers(result.Data.Select(request => request.Id.Value));
+    var result = await base.InsertAsync(inputModels);
+
+    if (result is SuccessResponse<IEnumerable<GameRequestViewModel>> response)
+      await CreateAnswers(response.Data.Select(request => request.Id.Value));
+
     return result;
   }
 
@@ -61,11 +70,8 @@ public class GameRequestSanitizerService(
   async Task<ValidationContext<GameRequestUpdateModel>> GetValidationContext(GameRequestUpdateModel inputModel)
   {
     ValidationContext<GameRequestUpdateModel> context = new(inputModel);
-    context.RootContextData.Add(
-      Constants.GameRequestContextSharedKey,
-      (await _requestAnswerReadonlyRepository.GetByIdAsync(inputModel.GameRequestAnswerId, []))?.Status
-    );
-
+    var gameRequest = await ReadonlySanitizerService.ReadonlyRepository.GetByIdAsync(inputModel.Id, [nameof(GameRequest.Answer)]);
+    context.RootContextData.Add(Constants.GameRequestContextSharedKey, gameRequest.Answer.Status);
     return context;
   }
 
@@ -73,7 +79,7 @@ public class GameRequestSanitizerService(
   {
     ValidationContext<IEnumerable<GameRequestUpdateModel>> context = new(inputModels);
     var answers = await GetAnswers(inputModels.Select(i => i.GameRequestAnswerId));
-    context.RootContextData.Add(Constants.GameRequestContextSharedKey, answers);
+    context.RootContextData.Add(Constants.GameRequestContextSharedKey, answers.Select(answer => answer.Status));
 
     return context;
   }
@@ -91,7 +97,7 @@ public class GameRequestSanitizerService(
   {
     SearchParams<GameRequestAnswer> searchParams = new()
     {
-      CustomPredicates = answer => ids.Contains(answer.Id),
+      CustomPredicates = answer => ids.Contains(answer.GameRequestId),
       PerPage = ids.Count()
     };
 
