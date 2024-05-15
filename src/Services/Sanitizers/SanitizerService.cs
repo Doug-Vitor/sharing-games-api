@@ -8,7 +8,7 @@ namespace Services;
 
 public class SanitizerService<T, TViewModel, TInputModel, TUpdateModel>
   : ISanitizerService<T, TViewModel, TInputModel, TUpdateModel>
-  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class
+  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class, IKeyed
 {
   public IReadonlySanitizerService<T, TViewModel> ReadonlySanitizerService { get; init; }
   public IWritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel> WritableSanitizerService { get; init; }
