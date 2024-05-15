@@ -8,7 +8,8 @@ internal static class ApiBehaviurConfiguration
 {
   internal static IServiceCollection AddApiBehavior(this IServiceCollection services)
   {
-    services.AddVersioning()
+    services.AddResourceSharingLimits()
+            .AddVersioning()
             .AddControllers()
             .ConfigureApiBehaviorOptions(options =>
             {
