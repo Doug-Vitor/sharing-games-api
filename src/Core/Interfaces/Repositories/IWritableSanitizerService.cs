@@ -4,7 +4,7 @@ using Core.Response;
 namespace Core.Interfaces;
 
 public interface IWritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel>
-  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class
+  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class, IKeyed
 {
   IWritableRepository<T> WritableRepository { get; init; }
   Task<ActionResponse> InsertAsync(TInputModel inputModel);

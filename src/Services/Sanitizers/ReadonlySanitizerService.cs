@@ -18,7 +18,7 @@ public class ReadonlySanitizerService<T, TViewModel>
   {
     ArgumentNullException.ThrowIfNull(id);
     T? foundEntity = await ReadonlyRepository.GetByIdAsync(id, propertyNamesToBeIncluded ?? Enumerable.Empty<string>());
-    if (foundEntity is null) return new ActionResponse((int)HttpStatusCode.NotFound);
+    if (foundEntity is null) return new ErrorResponse((int)HttpStatusCode.NotFound);
     return new SuccessResponse<TViewModel>((int)HttpStatusCode.OK, (TViewModel)(foundEntity as dynamic));
   }
 

@@ -44,7 +44,7 @@ public abstract class BaseController<T, TSearch, TViewModel, TInputModel, TUpdat
   readonlySanitizerService,
   propertyNamesToBeIncludedOnGetAction,
   propertyNamesToBeIncludedOnIndexAction
-) where T : BaseEntity where TSearch : SearchParams<T> where TViewModel : ViewModel where TInputModel : class where TUpdateModel : class
+) where T : BaseEntity where TSearch : SearchParams<T> where TViewModel : ViewModel where TInputModel : class where TUpdateModel : class, IKeyed
 {
   protected readonly ISanitizerService<T, TViewModel, TInputModel, TUpdateModel> SanitizerService = sanitizerService;
 
