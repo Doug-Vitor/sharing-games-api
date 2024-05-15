@@ -8,7 +8,7 @@ namespace Services;
 
 public class WritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel>
   : IWritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel>
-  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class
+  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class, IKeyed
 {
   public IWritableRepository<T> WritableRepository { get; init; }
 
@@ -37,7 +37,7 @@ public class WritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel>
   {
     ArgumentNullException.ThrowIfNull(id);
     var updatedEntity = await WritableRepository.UpdateAsync(id.Value, (T)(inputModel as dynamic));
-    return new SuccessResponse<TViewModel>((int)HttpStatusCode.Created, (TViewModel)(updatedEntity as dynamic));
+    return new SuccessResponse<TViewModel>((int)HttpStatusCode.OK, (TViewModel)(updatedEntity as dynamic));
   }
 
   public async Task<ActionResponse> UpdateAsync(IEnumerable<TUpdateModel> inputModels)
@@ -47,7 +47,7 @@ public class WritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel>
     );
 
     return new SuccessResponse<IEnumerable<TViewModel>>(
-      (int)HttpStatusCode.Created,
+      (int)HttpStatusCode.OK,
       entities.Select(entity => (TViewModel)(entity as dynamic))
     );
   }

@@ -1,3 +1,4 @@
+using System.Net;
 using Core.Entities;
 using Core.Interfaces;
 using Core.Response;
@@ -5,6 +6,8 @@ using Core.V1.DTOs;
 using Services.Interfaces;
 
 namespace Services;
+
+delegate Task<ActionResponse> OnOwnershipValidated();
 
 public class AuthenticatedSanitizerService<T, TViewModel, TInputModel, TUpdateModel>(
   IReadonlySanitizerService<T, TViewModel> readonlySanitizerService,
@@ -15,7 +18,7 @@ public class AuthenticatedSanitizerService<T, TViewModel, TInputModel, TUpdateMo
   readonlySanitizerService,
   writableSanitizerService,
   validator
-), IAuthenticatedSanitizerService<T, TViewModel, TInputModel, TUpdateModel> where T : BaseEntity, IOwnedByUser where TViewModel : ViewModel where TInputModel : class, IOwnedByUser where TUpdateModel : class, IOwnedByUser
+), IAuthenticatedSanitizerService<T, TViewModel, TInputModel, TUpdateModel> where T : BaseEntity, IOwnedByUser where TViewModel : ViewModel, IOwnedByUser where TInputModel : class, IOwnedByUser where TUpdateModel : class, IKeyed, IOwnedByUser
 {
   protected readonly string? AuthenticatedUserId = authService.AuthenticatedUserId;
 
@@ -33,17 +36,51 @@ public class AuthenticatedSanitizerService<T, TViewModel, TInputModel, TUpdateMo
     return base.InsertAsync(inputModels);
   }
 
-  public override Task<ActionResponse> UpdateAsync(int? id, TUpdateModel inputModel)
+  public override async Task<ActionResponse> UpdateAsync(int? id, TUpdateModel inputModel) =>
+    await ValidateOwnership(id, async () =>
+    {
+      inputModel.UserId = AuthenticatedUserId;
+      return await base.UpdateAsync(id, inputModel);
+    });
+
+  public override async Task<ActionResponse> UpdateAsync(IEnumerable<TUpdateModel> inputModels) =>
+    await ValidateOwnership(inputModels.Select(input => input.Id.GetValueOrDefault()), async () =>
+    {
+      foreach (var inputModel in inputModels)
+        inputModel.UserId = AuthenticatedUserId;
+
+      return await base.UpdateAsync(inputModels);
+    });
+
+  public override async Task<ActionResponse> RemoveAsync(int? id)
+    => await ValidateOwnership(id, async () => await WritableSanitizerService.RemoveAsync(id));
+
+
+  public override async Task<ActionResponse> RemoveAsync(IEnumerable<int>? ids)
+    => await ValidateOwnership(ids, async () => await base.RemoveAsync(ids));
+
+  async Task<ActionResponse> ValidateOwnership(int? id, OnOwnershipValidated onOwnershipValidated)
   {
-    inputModel.UserId = AuthenticatedUserId;
-    return base.UpdateAsync(id, inputModel);
+    var response = await ReadonlySanitizerService.GetByIdAsync(id);
+
+    if (response is SuccessResponse<TViewModel> successResponse && successResponse.Data.UserId == AuthenticatedUserId)
+      return await onOwnershipValidated();
+
+    return response is ErrorResponse ? response : new ActionResponse((int)HttpStatusCode.Forbidden);
   }
 
-  public override Task<ActionResponse> UpdateAsync(IEnumerable<TUpdateModel> inputModels)
+  async Task<ActionResponse> ValidateOwnership(IEnumerable<int> ids, OnOwnershipValidated onOwnershipValidated)
   {
-    foreach (var inputModel in inputModels)
-      inputModel.UserId = AuthenticatedUserId;
+    var response = await ReadonlySanitizerService.GetAllAsync(new()
+    {
+      CustomPredicates = entity => ids.Contains(entity.Id),
+      PerPage = ids.Count()
+    });
 
-    return base.UpdateAsync(inputModels);
+    var ownershipValidation = response is SuccessResponse<IEnumerable<TViewModel>> successResponse
+                              && successResponse.Data.All(data => data.UserId == AuthenticatedUserId);
+
+    if (ownershipValidation) return await onOwnershipValidated();
+    return response is ErrorResponse ? response : new ActionResponse((int)HttpStatusCode.Forbidden);
   }
 }

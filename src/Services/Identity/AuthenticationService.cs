@@ -24,10 +24,7 @@ public class AuthenticationService : IAuthenticationService
     if (_contextAccessor.HttpContext?.User.Identity?.IsAuthenticated is true)
     {
       User authenticatedUser = await _userManager.GetUserAsync(_contextAccessor.HttpContext.User);
-      return new SuccessResponse<UserViewModel>(
-        (int)HttpStatusCode.OK,
-        new(authenticatedUser.UserName)
-      );
+      return new SuccessResponse<UserViewModel>((int)HttpStatusCode.OK, (UserViewModel)authenticatedUser);
     }
 
     return new((int)HttpStatusCode.Unauthorized);

@@ -5,7 +5,7 @@ using Core.V1;
 namespace Core.Interfaces;
 
 public interface ISanitizerService<T, TViewModel, TInputModel, TUpdateModel>
-  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class
+  where T : BaseEntity where TViewModel : class where TInputModel : class where TUpdateModel : class, IKeyed
 {
   IReadonlySanitizerService<T, TViewModel> ReadonlySanitizerService { get; init; }
   IWritableSanitizerService<T, TViewModel, TInputModel, TUpdateModel> WritableSanitizerService { get; init; }

@@ -51,7 +51,7 @@ public abstract class BaseTest : IClassFixture<WebApplicationFactory<Program>>
     return await ParseAsync<T>(response);
   }
 
-  async Task<T> ParseAsync<T>(HttpResponseMessage response)
+  protected async Task<T> ParseAsync<T>(HttpResponseMessage response)
   {
     string responseBody = await response.Content.ReadAsStringAsync();
     return responseBody.FromJson<T>();
