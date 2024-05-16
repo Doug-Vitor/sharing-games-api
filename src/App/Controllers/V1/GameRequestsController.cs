@@ -17,7 +17,10 @@ public class GameRequestsController(
   propertyNamesToBeIncluded
 )
 {
-  static readonly string[] propertyNamesToBeIncluded = [nameof(GameRequest.Answer)];
+  static readonly string[] propertyNamesToBeIncluded = [
+    nameof(GameRequest.Answer),
+    nameof(GameRequest.Game)
+  ];
 
   public override async Task<IActionResult> Get([FromQuery] GameRequestSearchParams? searchParams)
   {
