@@ -27,7 +27,7 @@ public class AppDbSeeder(AppDbContext dbContext)
     var games = await SeedGames(publishers.Result);
     await SeedGameGenres(games, genres.Result);
 
-    var requests = await SeedGameRequests(users.Result);
+    var requests = await SeedGameRequests(users.Result, games);
     await SeedGameRequestAnswers(requests);
   }
 
@@ -98,9 +98,10 @@ public class AppDbSeeder(AppDbContext dbContext)
     return users;
   }
 
-  async Task<IEnumerable<GameRequest>> SeedGameRequests(IEnumerable<User> users)
+  async Task<IEnumerable<GameRequest>> SeedGameRequests(IEnumerable<User> users, IEnumerable<Game> games)
   {
     List<GameRequest> requests = [];
+    Random random = new();
 
     foreach (var user in users)
       for (int i = 0; i < 2; i++)
@@ -109,7 +110,8 @@ public class AppDbSeeder(AppDbContext dbContext)
           Title = "This is an awesome game",
           Description = "Please, add this for me",
           GameUrl = "sharing-games.com",
-          UserId = user.Id
+          UserId = user.Id,
+          GameId = games.ElementAt(random.Next(0, games.Count() - 1)).Id
         });
 
     await _dbContext.AddRangeAsync(requests);
