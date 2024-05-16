@@ -1,4 +1,5 @@
 using System.Net;
+using Core.Entities;
 using Core.Entities.Request;
 using Core.Enums;
 using Core.Response;
@@ -33,7 +34,7 @@ public class GetByIdTests() : BaseTest()
     );
 
     var response = await GetSingleAndValidateAsync($"/{request.Id}");
-    ApplySharedAsserts(request, response);
+    await ApplySharedAsserts(request, response);
   }
 
   [Fact]
@@ -43,16 +44,20 @@ public class GetByIdTests() : BaseTest()
     var request = DbSet.Include(request => request.Answer).First();
 
     var response = await GetSingleAndValidateAsync($"/{request.Id}");
-    ApplySharedAsserts(request, response);
+    await ApplySharedAsserts(request, response);
   }
 
-  static void ApplySharedAsserts(GameRequest request, SuccessResponse<GameRequestViewModel> response)
+  async Task ApplySharedAsserts(GameRequest request, SuccessResponse<GameRequestViewModel> response)
   {
+    var game = await Context.Set<Game>().FirstAsync(game => game.Id == request.GameId);
+
     Assert.Equal((int)HttpStatusCode.OK, response.StatusCode);
     Assert.Equal(request.Id, response.Data.Id);
     Assert.Equal(request.Title, response.Data.Title);
     Assert.Equal(request.Description, response.Data.Description);
     Assert.Equal(request.Answer.Status.ToString(), response.Data.AnswerStatus);
     Assert.Equal(request.UserId, response.Data.UserId);
+    Assert.Equal(game.Id, response.Data.Game.Id);
+    Assert.Equal(game.Name, response.Data.Game.Name);
   }
 }
