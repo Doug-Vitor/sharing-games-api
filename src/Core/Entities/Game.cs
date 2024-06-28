@@ -9,4 +9,5 @@ public record Game() : NamedEntity()
   public virtual Publisher Publisher { get; init; }
   public virtual ICollection<Image> Images { get; init; }
   public virtual ICollection<Genre> Genres { get; init; }
+  public virtual ICollection<Favorite> Favorites { get; init; }
 }
