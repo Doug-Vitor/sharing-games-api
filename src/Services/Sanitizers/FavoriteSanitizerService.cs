@@ -21,7 +21,6 @@ public class FavoriteSanitizerService(
   public new async Task<ActionResponse> GetAllAsync(FavoriteSearchParams searchParams, IEnumerable<string>? propertyNamesToBeIncluded)
   {
     searchParams.UserId = AuthenticatedUserId;
-    System.Console.WriteLine("tamo aqui aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     return await base.GetAllAsync(searchParams, propertyNamesToBeIncluded);
   }
 }
