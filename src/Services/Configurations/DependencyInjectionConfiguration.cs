@@ -21,7 +21,8 @@ public static class DependencyInjectionConfiguration
             .AddScoped(typeof(IWritableSanitizerService<,,,>), typeof(WritableSanitizerService<,,,>))
             .AddScoped(typeof(ISanitizerService<,,,>), typeof(SanitizerService<,,,>))
             .AddScoped(typeof(IAuthenticatedSanitizerService<,,,>), typeof(AuthenticatedSanitizerService<,,,>))
-            .AddScoped<GameRequestSanitizerService>();
+            .AddScoped<GameRequestSanitizerService>()
+            .AddScoped<FavoriteSanitizerService>();
 
   static IServiceCollection ConfigureAuthentication(this IServiceCollection services)
   {
